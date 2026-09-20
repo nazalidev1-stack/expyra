@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Expyra — Suivi des dates d'expiration, hors ligne</title>
+<meta name="description" content="Expyra suit les dates d'expiration de vos aliments, médicaments, documents et garanties. Hors ligne, sans compte, sans publicité.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#101F33;
+    --ink-soft:#4A5A6E;
+    --paper:#F5F7FA;
+    --card:#FFFFFF;
+    --line:#DCE3EC;
+    --blue:#1657C8;
+    --fresh:#1E7A52;
+    --soon:#9A5B12;
+    --gone:#B3261E;
+    --maxw:44rem;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+    font-size:17px;
+    line-height:1.6;
+  }
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 1.25rem}
+  a{color:var(--blue)}
+  a:focus-visible,button:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:4px}
+
+  header{padding:4.5rem 0 3rem}
+  .mark{
+    display:inline-block;font-weight:700;letter-spacing:-.02em;
+    font-size:1.05rem;margin-bottom:2.75rem;
+  }
+  h1{
+    font-size:clamp(2rem,6vw,2.9rem);line-height:1.12;letter-spacing:-.03em;
+    font-weight:700;margin:0 0 1rem;max-width:20ch;
+  }
+  .lede{font-size:1.1rem;color:var(--ink-soft);margin:0 0 2rem;max-width:52ch}
+
+  /* Le hero : ce que l'app montre vraiment, des échéances. */
+  .shelf{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:.35rem 1rem;
+  }
+  .row{
+    display:flex;align-items:center;gap:1rem;
+    padding:.85rem 0;border-top:1px solid var(--line);
+  }
+  .row:first-child{border-top:0}
+  .row .what{flex:1;min-width:0}
+  .row .name{font-weight:600;display:block}
+  .row .date{color:var(--ink-soft);font-size:.9rem}
+  .when{
+    font-size:.82rem;font-weight:600;white-space:nowrap;
+    padding:.28rem .6rem;border-radius:999px;border:1px solid currentColor;
+  }
+  .when.fresh{color:var(--fresh)}
+  .when.soon{color:var(--soon)}
+  .when.gone{color:var(--gone)}
+
+  nav.jump{
+    display:flex;flex-wrap:wrap;gap:1.25rem;margin:2.5rem 0 0;
+    font-size:.95rem;font-weight:500;
+  }
+
+  section{padding:3rem 0;border-top:1px solid var(--line)}
+  h2{font-size:1.45rem;letter-spacing:-.02em;margin:0 0 1rem;font-weight:700}
+  h3{font-size:1.02rem;margin:2rem 0 .4rem;font-weight:600}
+  p{margin:0 0 1rem;max-width:64ch}
+  ul{margin:0 0 1rem;padding-left:1.15rem;max-width:64ch}
+  li{margin-bottom:.35rem}
+
+  .contact{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:1.5rem;
+  }
+  .contact a{font-weight:600;font-size:1.05rem;word-break:break-all}
+  .contact p:last-child{margin-bottom:0}
+
+  .legal{font-family:"Source Serif 4",Georgia,serif;line-height:1.7}
+  .legal p,.legal ul{max-width:68ch}
+  .updated{color:var(--ink-soft);font-size:.92rem;font-family:"Instrument Sans",sans-serif}
+
+  .langs{display:flex;gap:.5rem;margin:0 0 1.75rem}
+  .langs button{
+    font:inherit;font-size:.92rem;font-weight:600;cursor:pointer;
+    background:transparent;border:1px solid var(--line);color:var(--ink-soft);
+    padding:.4rem .9rem;border-radius:999px;
+  }
+  .langs button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+  [hidden]{display:none}
+
+  footer{
+    padding:2.5rem 0 4rem;border-top:1px solid var(--line);
+    color:var(--ink-soft);font-size:.9rem;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --ink:#E8EDF4;--ink-soft:#9AA8BA;--paper:#0E1723;--card:#162233;
+      --line:#27374B;--blue:#7BA6F5;--fresh:#5FC793;--soon:#E0A85A;--gone:#F08A82;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <span class="mark">Expyra</span>
+    <h1>Rien ne se périme à votre insu.</h1>
+    <p class="lede">Expyra suit les dates d'expiration de vos aliments, médicaments, documents et garanties, et vous prévient à temps. Tout reste sur votre iPhone : pas de compte, pas de cloud, pas de publicité.</p>
+
+    <div class="shelf">
+      <div class="row">
+        <span class="what"><span class="name">Passeport</span><span class="date">14 mars 2027</span></span>
+        <span class="when fresh">dans 6 mois</span>
+      </div>
+      <div class="row">
+        <span class="what"><span class="name">Amoxicilline 500 mg</span><span class="date">2 octobre 2026</span></span>
+        <span class="when soon">dans 12 jours</span>
+      </div>
+      <div class="row">
+        <span class="what"><span class="name">Crème solaire</span><span class="date">31 août 2026</span></span>
+        <span class="when gone">périmé</span>
+      </div>
+    </div>
+
+    <nav class="jump">
+      <a href="#support">Assistance</a>
+      <a href="#confidentialite">Confidentialité</a>
+      <a href="mailto:nazalidev1@gmail.com">Nous écrire</a>
+    </nav>
+  </div>
+</header>
+
+<section id="support">
+  <div class="wrap">
+    <h2>Assistance</h2>
+    <p>Une question, un problème, une idée de fonctionnalité ? Écrivez-nous, une vraie personne vous répondra.</p>
+    <div class="contact">
+      <p><a href="mailto:nazalidev1@gmail.com">nazalidev1@gmail.com</a></p>
+      <p>Réponse sous 48 heures, en français, en anglais ou en arabe.</p>
+      <p>Pour un bug, indiquez votre modèle d'iPhone, votre version d'iOS et ce que vous faisiez au moment du problème : ça nous fait gagner un aller-retour.</p>
+    </div>
+
+    <h3>Gérer un abonnement</h3>
+    <p>Les abonnements Expyra Premium se gèrent depuis votre compte Apple : Réglages, votre nom, Abonnements. Vous pouvez y modifier votre formule ou l'annuler à tout moment.</p>
+
+    <h3>Récupérer un achat</h3>
+    <p>Après une réinstallation ou un changement d'iPhone, ouvrez l'écran Premium et touchez « Restaurer l'achat ». Votre achat est rattaché à votre compte Apple, pas à l'appareil.</p>
+  </div>
+</section>
+
+<section id="confidentialite">
+  <div class="wrap">
+    <h2>Confidentialité</h2>
+
+    <div class="langs">
+      <button type="button" data-lang="fr" aria-pressed="true">Français</button>
+      <button type="button" data-lang="en" aria-pressed="false">English</button>
+    </div>
+
+    <div class="legal" id="privacy-fr">
+      <p class="updated">Dernière mise à jour : 20 septembre 2026</p>
+
+      <p>Expyra est une application de suivi des dates d'expiration : aliments, médicaments, documents, cosmétiques, produits ménagers. Elle fonctionne entièrement hors ligne. Aucune donnée n'est transmise à un serveur, aucun compte n'est nécessaire.</p>
+
+      <h3>Données et stockage</h3>
+      <p>Expyra ne collecte aucune donnée personnelle. Ce que vous saisissez — noms de produits, dates, notes, prix, photos — est enregistré uniquement sur votre appareil, dans une base chiffrée. Rien n'est envoyé, vendu ni partagé.</p>
+      <ul>
+        <li>Noms, dates, notes et prix : sur l'appareil, chiffrés</li>
+        <li>Photos des produits : sur l'appareil</li>
+        <li>Préférences (langue, devise, thème) : sur l'appareil</li>
+      </ul>
+
+      <h3>Autorisations</h3>
+      <ul>
+        <li>Appareil photo : prendre la photo d'un produit</li>
+        <li>Photos : choisir une image existante</li>
+        <li>Notifications : envoyer les rappels d'expiration</li>
+      </ul>
+      <p>Aucune autorisation n'est utilisée à des fins publicitaires, statistiques ou de suivi.</p>
+
+      <h3>Notifications</h3>
+      <p>Les rappels sont des notifications locales, générées sur votre appareil. Ils ne passent par aucun serveur. Vous pouvez les désactiver à tout moment dans les réglages de votre appareil.</p>
+
+      <h3>Sauvegardes</h3>
+      <p>La sauvegarde crée un fichier chiffré contenant vos éléments et vos photos. Ce fichier reste sur votre appareil ; l'application ne l'envoie nulle part. Vous seul décidez de le partager.</p>
+
+      <h3>Sécurité</h3>
+      <p>Les données sont chiffrées sur l'appareil, avec une clé conservée dans le trousseau sécurisé du système. Si vous désinstallez l'application, tout est supprimé, à l'exception des sauvegardes que vous avez exportées vous-même.</p>
+
+      <h3>Enfants</h3>
+      <p>Expyra ne collecte aucune donnée, quel que soit l'âge de la personne qui l'utilise.</p>
+
+      <h3>Vos droits (RGPD)</h3>
+      <ul>
+        <li>Accès : vos données sont visibles dans l'application</li>
+        <li>Rectification : modifiez ou supprimez n'importe quel élément</li>
+        <li>Effacement : désinstallez l'application</li>
+        <li>Portabilité : exportez vos données avec la sauvegarde</li>
+      </ul>
+      <p>Aucune démarche auprès d'un tiers n'est nécessaire, puisque aucune donnée ne quitte votre appareil.</p>
+
+      <h3>Modifications</h3>
+      <p>Cette politique est mise à jour lorsque l'application évolue. La date en haut de page indique la dernière version.</p>
+
+      <h3>Contact</h3>
+      <p><a href="mailto:nazalidev1@gmail.com">nazalidev1@gmail.com</a></p>
+    </div>
+
+    <div class="legal" id="privacy-en" hidden lang="en">
+      <p class="updated">Last updated: 20 September 2026</p>
+
+      <p>Expyra tracks expiry dates for food, medicines, documents, cosmetics and household products. It works entirely offline. No data is sent to any server, and no account is required.</p>
+
+      <h3>Data and storage</h3>
+      <p>Expyra collects no personal data. What you enter — product names, dates, notes, prices, photos — is stored only on your device, in an encrypted database. Nothing is sent, sold or shared.</p>
+      <ul>
+        <li>Names, dates, notes and prices: on the device, encrypted</li>
+        <li>Product photos: on the device</li>
+        <li>Preferences (language, currency, theme): on the device</li>
+      </ul>
+
+      <h3>Permissions</h3>
+      <ul>
+        <li>Camera: take a photo of a product</li>
+        <li>Photos: pick an existing image</li>
+        <li>Notifications: deliver expiry reminders</li>
+      </ul>
+      <p>No permission is used for advertising, analytics or tracking.</p>
+
+      <h3>Notifications</h3>
+      <p>Reminders are local notifications created on your device. They never travel through a server. You can turn them off at any time in your device settings.</p>
+
+      <h3>Backups</h3>
+      <p>A backup creates an encrypted file containing your items and photos. The file stays on your device; the app never sends it anywhere. Sharing it is your decision alone.</p>
+
+      <h3>Security</h3>
+      <p>Data is encrypted on the device, with the key held in the system's secure keychain. Uninstalling the app deletes everything, except backups you exported yourself.</p>
+
+      <h3>Children</h3>
+      <p>Expyra collects no data, whatever the age of the person using it.</p>
+
+      <h3>Your rights (GDPR)</h3>
+      <ul>
+        <li>Access: your data is visible inside the app</li>
+        <li>Rectification: edit or delete any item</li>
+        <li>Erasure: uninstall the app</li>
+        <li>Portability: export your data using the backup feature</li>
+      </ul>
+      <p>No third-party request is needed, since no data ever leaves your device.</p>
+
+      <h3>Changes</h3>
+      <p>This policy is updated as the app evolves. The date at the top shows the latest version.</p>
+
+      <h3>Contact</h3>
+      <p><a href="mailto:nazalidev1@gmail.com">nazalidev1@gmail.com</a></p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Expyra — suivi des dates d'expiration pour iPhone. Aucune donnée collectée, fonctionne hors ligne.</p>
+  </div>
+</footer>
+
+<script>
+  var buttons = document.querySelectorAll('.langs button');
+  var panes = { fr: document.getElementById('privacy-fr'), en: document.getElementById('privacy-en') };
+  buttons.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var lang = btn.dataset.lang;
+      buttons.forEach(function (b) { b.setAttribute('aria-pressed', String(b === btn)); });
+      panes.fr.hidden = lang !== 'fr';
+      panes.en.hidden = lang !== 'en';
+    });
+  });
+</script>
+</body>
+</html>
